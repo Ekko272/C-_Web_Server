@@ -4,7 +4,7 @@
 
 #define PRINTF(str) printf("[%s - %d]"#str"=%s", __func__, __LINE__, str);
 using namespace std;
-
+//te
 void error_die(const char* str) {
 	perror(str);
 	exit(1);
@@ -89,7 +89,7 @@ DWORD WINAPI accept_request(LPVOID arg) {
 	int client = (SOCKET)arg;
 
 
-	// Read a line of data
+	// Read a line of data 
 	int numchars = get_line(client, buff, sizeof(buff));
 	PRINTF(buff);
 
