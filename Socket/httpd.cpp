@@ -1,10 +1,11 @@
 #include <iostream>
+#include <string.h>
 #include <WinSock2.h>
 #pragma comment(lib, "WS2_32.lib")
 
 #define PRINTF(str) printf("[%s - %d]"#str"=%s", __func__, __LINE__, str);
 using namespace std;
-//te
+
 void error_die(const char* str) {
 	perror(str);
 	exit(1);
@@ -81,6 +82,9 @@ int get_line(int sock, char* buff, int size) {
 	return i;
 }
 
+void unimplement(int client) {
+
+}
 
 // Dealing with the thread that user created
 DWORD WINAPI accept_request(LPVOID arg) {
@@ -103,21 +107,32 @@ DWORD WINAPI accept_request(LPVOID arg) {
 	PRINTF(method);
 	
 	//check if the method of the request is supported by this server
-
 	// Resolve the path of resource file 
 	// www.ekko.com/abc/index.html
 	// GET /abc/index.html HTTP /1.1\n
+	if (_stricmp(method, "GET") && _stricmp(method, "POST")) {
 
-	if (strcmp(method, "GET") && strcmp(method, "POST")) {
-
+		unimplement(client);
+		return 0;
 	}
 
+	char url[255]; //Store the complete path of the request resource
+	i = 0;
+	while (isspace(buff[j]) && j < sizeof(buff)) {
+		j++;
+	}
+	
+	while (!isspace(buff[j]) && i < sizeof(url) - 1 && j < sizeof(buff)) {
+		url[i++] = buff[j++];
+	}
+	url[i] = 0;
+	PRINTF(url);
 
 	return 0;
 }
 
 int main() {
-	unsigned short port = 8000;
+	unsigned short port = 80;
 	int server_sock = startUp(&port);
 	cout << "httpd server started, listening to " << port << endl;
 
